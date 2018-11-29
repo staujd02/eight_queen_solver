@@ -1,0 +1,14 @@
+{
+    "python.jediEnabled": false,
+    "python.unitTest.unittestArgs": [
+        "-v",
+        "-t",
+        "-p",
+        "*_tests.py"
+    ],
+    "python.unitTest.pyTestEnabled": false,
+    "python.unitTest.nosetestsEnabled": false,
+    "python.unitTest.unittestEnabled": true,
+    "python.linting.pylintEnabled": true,
+    "python.pythonPath": "C:\\Users\\Joel\\.windows-build-tools\\python27\\python.exe"
+}

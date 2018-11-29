@@ -11,4 +11,4 @@ class Variables(object):
 class Queen(object):
 
     def __init__(self):
-       self.domain = [] 
+       self.domain = set() 
