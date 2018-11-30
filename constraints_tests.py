@@ -7,7 +7,7 @@ class Variable_Tests(unittest.TestCase):
 
     def setUp(self):
         self.constraints = Constraints()
-        self.variables = Variables()
+        self.variables = Variables(8)
 
     def test_constraints_exist(self):
         self.assertNotEqual(None, self.constraints)

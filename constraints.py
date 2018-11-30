@@ -5,7 +5,7 @@ class Constraints(object):
         self.set = set()
 
     def queensRowsConflict(self, variables):
-        availableRows = set(range(1,9))
+        availableRows = set(range(1,len(variables.queens) + 1))
         for queen in variables.queens:
             if not queen.unassigned():
                 availableRows.remove(queen.value)

@@ -4,10 +4,11 @@ from variables import Variables
 class Variable_Tests(unittest.TestCase):
 
     def setUp(self):
-        self.variables = Variables()
+        self.variables = Variables(8)
 
-    def test_variables_has_eight_queens(self):
-        self.assertEqual(8, len(self.variables.queens))
+    def test_variables_has_a_number_of_queens(self):
+        varis = Variables(6)
+        self.assertEqual(6, len(varis.queens))
 
     def test_each_queen_has_a_domain(self):
         self.assertNotEqual(None, self.variables.queens[0].domain)
