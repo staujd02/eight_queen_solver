@@ -15,9 +15,9 @@ class Variable_Tests(unittest.TestCase):
         self.assertNotEqual(None, self.variables.queens[2].domain)
         self.assertNotEqual(None, self.variables.queens[6].domain)
         self.assertNotEqual(None, self.variables.queens[7].domain)
-    
-    def test_a_queens_domain_is_a_set(self):
-        self.assertEqual(type(set()), type(self.variables.queens[0].domain))
 
     def test_a_queens_domain_is_a_set_containg_a_range_from_1_to_8(self):
         self.assertEqual(self.variables.queens[0].domain.issubset([1,2,3,4,5,6,7,8]), True)
+    
+    def test_a_queen_has_a_value_initialized_to_negative_one(self):
+        self.assertEqual(self.variables.queens[0].value, -1)
