@@ -8,6 +8,13 @@ class Variables(object):
             i += 1
             self.queens.append(Queen(number)) 
 
+    def copy(self):
+        new = Variables(len(self.queens))
+        for idx, queen in enumerate(self.queens):
+            new.queens[idx].value = queen.value
+            new.queens[idx].domain = set(queen.domain)
+        return new
+
 class Queen(object):
 
     def __init__(self, number):

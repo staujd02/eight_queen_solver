@@ -22,3 +22,11 @@ class Variable_Tests(unittest.TestCase):
     
     def test_a_queen_has_a_value_initialized_to_negative_one(self):
         self.assertEqual(self.variables.queens[0].value, -1)
+    
+    def test_a_copy_variable_list_is_indepentent(self):
+        varis = Variables(4)
+        newVaris = varis.copy()
+        varis.queens[0].value = 1
+        varis.queens[0].domain = set([1, 2, 3])
+        self.assertNotEqual(1, newVaris.queens[0].value)
+        self.assertNotEqual(set([1, 2, 3]), newVaris.queens[0].domain)
