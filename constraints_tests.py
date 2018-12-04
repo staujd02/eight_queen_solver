@@ -57,4 +57,12 @@ class Variable_Tests(unittest.TestCase):
     def test_constraints_will_return_the_pruned_values(self):
         self.variables.queens[0].value = 1
         values = self.constraints.wipeout(self.variables, self.variables.queens[0])
-        self.assertItemsEqual([{1, 1}, {2, 1}, {3, 1}, {4, 1},{5, 1},{6, 1},{7, 1},{1, 2},{2, 3},{3, 4},{4, 5},{5, 6},{6, 7},{7, 8}], values)
+        self.assertItemsEqual([(1, 1), (2, 1), (3, 1), (4, 1), (5, 1),(6, 1),(7, 1),(1, 2),(2, 3),(3, 4),(4, 5),(5, 6),(6, 7),(7, 8)], values)
+    
+    def test_constraints_can_restore_domains(self):
+        self.variables.queens[0].value = 1
+        values = self.constraints.wipeout(self.variables, self.variables.queens[0])
+        self.constraints.restore(self.variables, values)
+        self.assertEqual(set([1,2,3,4,5,6,7,8]), self.variables.queens[0].domain)
+        self.assertEqual(set([1,2,3,4,5,6,7,8]), self.variables.queens[1].domain)
+        self.assertEqual(set([1,2,3,4,5,6,7,8]), self.variables.queens[7].domain)

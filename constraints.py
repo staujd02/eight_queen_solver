@@ -35,7 +35,7 @@ class Constraints(object):
                     queen.value = value
                     if not self.verify(variables):
                         remove.add(value)
-                        removed.append({idx, value})
+                        removed.append((idx, value))
                 queen.domain = queen.domain.difference(remove)
                 queen.value = -1
         return removed
@@ -45,3 +45,6 @@ class Constraints(object):
             return self.validDiagonals(variables)
         return False
 
+    def restore(self, variables, domainTuples):
+        for t in domainTuples:
+            variables.queens[t[0]].domain.add(t[1])
