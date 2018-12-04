@@ -2,18 +2,17 @@ import unittest
 
 from forwardchecking import ForwardChecking
 from variables import Variables
+from constraints import Constraints
 
 class ForwardChecking_Tests(unittest.TestCase):
 
     def setUp(self):
-        self.forwardchecking = ForwardChecking()
+        self.forwardchecking = ForwardChecking(Constraints(8))
 
-    def test_forward_checking_exists(self):
-        self.assertIsNotNone(self.forwardchecking)
-    
     def test_backtracking_can_find_a_solution(self):
         problem = Variables(4)
-        self.forwardchecking.findSolution(problem)
+        forwardchecking = ForwardChecking(Constraints(4))
+        forwardchecking.findSolution(problem)
         self.assertTrue(self.fourByFourSolution(problem.queens) or self.altFourByFourSolution(problem.queens))
 
     def fourByFourSolution(self, queens):

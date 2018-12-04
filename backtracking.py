@@ -2,8 +2,8 @@ from constraints import Constraints
 
 class BackTracking(object):
 
-    def __init__(self):
-        self.constraints = Constraints()
+    def __init__(self, constraints):
+        self.constraints = constraints
 
     def findSolution(self, variables):
         self.backtracking(0, variables)

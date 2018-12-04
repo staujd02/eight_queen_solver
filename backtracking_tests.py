@@ -2,16 +2,18 @@ import unittest
 
 from backtracking import BackTracking
 from variables import Variables
+from constraints import Constraints
 
 class BackTracking_Tests(unittest.TestCase):
 
     def setUp(self):
         self.variables = Variables(8)
-        self.backtracking = BackTracking()
+        self.backtracking = BackTracking(Constraints(8))
 
     def test_backtracking_can_find_a_solution(self):
         problem = Variables(4)
-        self.backtracking.findSolution(problem)
+        backtracking = BackTracking(Constraints(4))
+        backtracking.findSolution(problem)
         self.assertTrue(self.fourByFourSolution(problem.queens) or self.altFourByFourSolution(problem.queens))
     
     def test_backtracking_can_find_a_larger_solution(self):

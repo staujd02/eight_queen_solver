@@ -1,5 +1,10 @@
 
+from constraints import Constraints
+
 class ForwardChecking(object):
+    
+    def __init__(self, constraints):
+        self.constraints = constraints
     
     def findSolution(self, variables):
         self.forwardChecking(0, variables)
@@ -25,7 +30,7 @@ class ForwardChecking(object):
             pick.value = value
             domainWipeout = False
             for queen in self.oneLeft(variables):
-                if self.constraints.Wipeout(variables, queen):
+                if self.constraints.wipeout(variables, queen):
                     domainWipeout = True
                     break
             if not domainWipeout:
@@ -34,7 +39,7 @@ class ForwardChecking(object):
     def assignedValueLeadsToValidSolution(self, level, variables):
         return self.constraints.verify(variables) and self.backtracking(level + 1, variables)
 
-    def oneLeft(variables):
+    def oneLeft(self, variables):
         queensWithOneValueLeft = []
         for queen in variables.queens:
             if len(queen.domain) == 1:

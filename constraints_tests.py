@@ -6,7 +6,7 @@ from variables import Variables
 class Variable_Tests(unittest.TestCase):
 
     def setUp(self):
-        self.constraints = Constraints()
+        self.constraints = Constraints(8)
         self.variables = Variables(8)
 
     def test_constraints_exist(self):
@@ -57,7 +57,7 @@ class Variable_Tests(unittest.TestCase):
     def test_constraints_will_return_the_pruned_values(self):
         self.variables.queens[0].value = 1
         values = self.constraints.wipeout(self.variables, self.variables.queens[0])
-        self.assertItemsEqual([(1, 1), (2, 1), (3, 1), (4, 1), (5, 1),(6, 1),(7, 1),(1, 2),(2, 3),(3, 4),(4, 5),(5, 6),(6, 7),(7, 8)], values)
+        self.assertItemsEqual([(3, 1), (2, 3), (7, 8), (2, 1), (7, 1), (5, 6), (4, 1), (4, 5), (5, 1), (1, 2), (3, 4), (6, 1), (1, 1), (6, 7)], values)
     
     def test_constraints_can_restore_domains(self):
         self.variables.queens[0].value = 1
