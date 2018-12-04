@@ -25,6 +25,20 @@ class Constraints(object):
                 if abs(queen.value - otherQueen.value) == abs(idx - (index + 1 + idx)):
                     return False
         return True
+
+    def wipeout(self, variables, queen):
+        removed = []
+        for idx, queen in enumerate(variables.queens):
+            if queen.value == -1:
+                remove = set()
+                for value in queen.domain:
+                    queen.value = value
+                    if not self.verify(variables):
+                        remove.add(value)
+                        removed.append({idx, value})
+                queen.domain = queen.domain.difference(remove)
+                queen.value = -1
+        return removed
     
     def verify(self, variables):
         if self.validRows(variables):
