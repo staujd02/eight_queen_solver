@@ -35,26 +35,35 @@ class Constraints(object):
         queen2 = variables.queens[constraint[0] - 1]
         return queen1.number == queen.number and not queen2.number == queen.number
 
+    def obtainQueenToCheckForDomain(self, variables, constraint, queen):
+        queenToCheck = -1
+        queen1 = variables.queens[constraint[1] - 1]
+        queen2 = variables.queens[constraint[0] - 1]
+        if not queen1.number == queen.number and not queen2.number == queen.number or not queen1.unassigned() and not queen2.unassigned():
+            return None
+        if queen2.number == queen.number:
+            return queen1
+        if queen1.number == queen.number:
+            queenToCheck = queen2
+
+    def domainValuesToRemove(self, variables, constraint, queenToCheck, removed):
+        remove = set()
+        for value in queenToCheck.domain:
+            queenToCheck.value = value
+            if self.constraintFails(variables, constraint):
+                remove.add(value)
+                removed.append((queenToCheck.number - 1, value))
+        return remove
+
     def wipeout(self, variables, queen):
         removed = []
         for constraint in self.set:
-            queenToCheck = -1
-            queen1 = variables.queens[constraint[1] - 1]
-            queen2 = variables.queens[constraint[0] - 1]
-            if not queen1.number == queen.number and not queen2.number == queen.number:
+            queenToCheck = self.obtainQueenToCheckForDomain(
+                variables, constraint, queen)
+            if queenToCheck == None:
                 continue
-            if not queen1.unassigned() and not queen2.unassigned():
-                continue
-            if queen2.number == queen.number:
-                queenToCheck = queen1
-            if queen1.number == queen.number:
-                queenToCheck = queen2
-            remove = set()
-            for value in queenToCheck.domain:
-                queenToCheck.value = value
-                if self.constraintFails(variables, constraint):
-                    remove.add(value)
-                    removed.append((queenToCheck.number - 1, value))
+            remove = self.domainValuesToRemove(
+                variables, constraint, queenToCheck, removed)
             if len(queenToCheck.domain) == len(remove):
                 self.restore(variables, removed)
                 return None
