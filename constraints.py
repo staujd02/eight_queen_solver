@@ -12,80 +12,56 @@ class Constraints(object):
     def rowConstraints(self, set, numberOfQueens):
         for x in range(1, numberOfQueens):
             for y in range(x + 1, numberOfQueens + 1):
-                set.add((x, y, lambda variables, queen1, queen2: self.rowViolatesConstraint(variables, queen1, queen2)))
+                set.add((x, y, lambda variables, queen1, queen2: self.rowViolatesConstraint(
+                    variables, queen1, queen2)))
 
     def rowViolatesConstraint(self, variables, queen1, queen2):
-        return queen1.value != -1 and queen2.value != -1 and queen1.value == queen2.value
+        return self.bothQueensHaveAValue(queen1, queen2) and queen1.value == queen2.value
 
     def diagonalConstraints(self, set, numberOfQueens):
         for x in range(1, numberOfQueens):
             for y in range(x + 1, numberOfQueens + 1):
-                set.add((x, y, lambda variables, queen1, queen2: self.diagonalViolatesConstraint(variables, queen1, queen2)))
+                set.add((x, y, lambda variables, queen1, queen2: self.diagonalViolatesConstraint(
+                    variables, queen1, queen2)))
 
     def diagonalViolatesConstraint(self, variables, queen1, queen2):
-        return queen1.value != -1 and queen2.value != -1 and abs(queen1.value - queen2.value) == abs(variables.queens.index(queen1) - variables.queens.index(queen2))
+        return self.bothQueensHaveAValue(queen1, queen2) and abs(queen1.value - queen2.value) == abs(queen1.number - queen2.number)
 
-    def queensRowsConflict(self, variables):
-        availableRows = set(range(1,len(variables.queens) + 1))
-        for queen in variables.queens:
-            if not queen.unassigned():
-                availableRows.remove(queen.value)
+    def bothQueensHaveAValue(self, queen1, queen2):
+        return not queen1.unassigned() and not queen2.unassigned()
 
-    def validRows(self, variables):
-        try:
-            self.queensRowsConflict(variables)
-        except KeyError:
-            return False
-        return True
-
-    def validDiagonals(self, variables):
-        for idx, queen in enumerate(variables.queens[:-1]):
-            for index, otherQueen in enumerate(variables.queens[(idx + 1):]):
-                if queen.unassigned() or otherQueen.unassigned():
-                    continue
-                if abs(queen.value - otherQueen.value) == abs(idx - (index + 1 + idx)):
-                    return False
-        return True
-
-    # def wipeout(self, variables, queen):
-    #     removed = []
-    #     for idx, queen in enumerate(variables.queens):
-    #         if queen.value == -1:
-    #             remove = set()
-    #             for value in queen.domain:
-    #                 queen.value = value
-    #                 if not self.verify(variables):
-    #                     remove.add(value)
-    #                     removed.append((idx, value))
-    #             queen.domain = queen.domain.difference(remove)
-    #             queen.value = -1
-    #     return removed
+    def queenAppearsInConstraintScope(self, variables, queen, constraint):
+        queen1 = variables.queens[constraint[1] - 1]
+        queen2 = variables.queens[constraint[0] - 1]
+        return queen1.number == queen.number and not queen2.number == queen.number
 
     def wipeout(self, variables, queen):
-        queenNumber = variables.queens.index(queen) + 1
-        queenToCheck = -1
         removed = []
         for constraint in self.set:
-            if constraint[0] == queenNumber or constraint[1] == queenNumber:
-                if constraint[0] == queenNumber and variables.queens[constraint[1] - 1].value == -1:
-                    queenToCheck = variables.queens[constraint[1] - 1]
-                if constraint[1] == queenNumber and variables.queens[constraint[0] - 1].value == -1:
-                    queenToCheck = variables.queens[constraint[0] - 1]
-                if queenToCheck == -1:
-                    continue
-                remove = set()
-                for value in queenToCheck.domain:
-                    queenToCheck.value = value 
-                    if self.constraintFails(variables, constraint):
-                        remove.add(value)
-                        removed.append((variables.queens.index(queenToCheck), value))
-                if len(queenToCheck.domain) == len(remove):
-                    self.restore(variables, removed)
-                    return None
-                queenToCheck.domain = queenToCheck.domain.difference(remove)
-                queenToCheck.value = -1
+            queenToCheck = -1
+            queen1 = variables.queens[constraint[1] - 1]
+            queen2 = variables.queens[constraint[0] - 1]
+            if not queen1.number == queen.number and not queen2.number == queen.number:
+                continue
+            if not queen1.unassigned() and not queen2.unassigned():
+                continue
+            if queen2.number == queen.number:
+                queenToCheck = queen1
+            if queen1.number == queen.number:
+                queenToCheck = queen2
+            remove = set()
+            for value in queenToCheck.domain:
+                queenToCheck.value = value
+                if self.constraintFails(variables, constraint):
+                    remove.add(value)
+                    removed.append((queenToCheck.number - 1, value))
+            if len(queenToCheck.domain) == len(remove):
+                self.restore(variables, removed)
+                return None
+            queenToCheck.domain = queenToCheck.domain.difference(remove)
+            queenToCheck.value = -1
         return removed
-    
+
     def verify(self, variables):
         for constraint in self.set:
             if self.constraintFails(variables, constraint):
@@ -96,5 +72,5 @@ class Constraints(object):
         return constraint[2](variables, variables.queens[constraint[0] - 1], variables.queens[constraint[1] - 1])
 
     def restore(self, variables, domainTuples):
-        for t in domainTuples:
-            variables.queens[t[0]].domain.add(t[1])
+        for indexValuePair in domainTuples:
+            variables.queens[indexValuePair[0]].domain.add(indexValuePair[1])

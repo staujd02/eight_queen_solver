@@ -19,6 +19,13 @@ class Variable_Tests(unittest.TestCase):
 
     def test_a_queens_domain_is_a_set_containg_a_range_from_1_to_8(self):
         self.assertEqual(self.variables.queens[0].domain.issubset([1,2,3,4,5,6,7,8]), True)
+
+    def test_a_queen_knows_there_own_column_number(self):
+        self.assertEqual(1, self.variables.queens[0].number)
+        self.assertEqual(2, self.variables.queens[1].number)
+        self.assertEqual(6, self.variables.queens[5].number)
+        self.assertEqual(7, self.variables.queens[6].number)
+        self.assertEqual(8, self.variables.queens[7].number)
     
     def test_a_queen_has_a_value_initialized_to_negative_one(self):
         self.assertEqual(self.variables.queens[0].value, -1)

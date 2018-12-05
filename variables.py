@@ -1,12 +1,12 @@
 
 class Variables(object):
 
-    def __init__(self, number):
+    def __init__(self, domainRange):
         self.queens = []
         i = 0
-        while i < number:
+        while i < domainRange:
             i += 1
-            self.queens.append(Queen(number)) 
+            self.queens.append(Queen(domainRange, i)) 
 
     def copy(self):
         new = Variables(len(self.queens))
@@ -17,9 +17,10 @@ class Variables(object):
 
 class Queen(object):
 
-    def __init__(self, number):
-       self.domain = set(range(1,number + 1))
+    def __init__(self, domainRange, columnNumber):
+       self.domain = set(range(1, domainRange + 1))
        self.value = -1
+       self.number = columnNumber
     
     def __str__(self):
      return "{Value: " + str(self.value) + "| Domain: [" + str(self.domain) + "]}"
