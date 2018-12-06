@@ -15,7 +15,6 @@ class ForwardChecking(object):
             return True
         if self.problemSolved(level, selectedQueen, variables):
             return True
-        selectedQueen.value = -1
         return False
     
     def pickUnassignedQueenFrom(self, variables):
@@ -29,12 +28,14 @@ class ForwardChecking(object):
         for value in pick.domain:
             pick.value = value
             domainWipeout = False
-            for queen in self.oneLeft(variables):
-                if self.constraints.wipeout(variables, queen):
-                    domainWipeout = True
-                    break
+            removedDomains = self.constraints.wipeout(variables, pick)
+            if removedDomains == None:
+                domainWipeout = True
             if not domainWipeout:
-                self.forwardChecking(level + 1, variables)
+                if self.forwardChecking(level + 1, variables):
+                    return True
+                self.constraints.restore(variables, removedDomains)
+        pick.value = -1
 
     def assignedValueLeadsToValidSolution(self, level, variables):
         return self.constraints.verify(variables) and self.backtracking(level + 1, variables)

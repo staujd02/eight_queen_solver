@@ -66,6 +66,7 @@ class Constraints(object):
                 variables, constraint, queenToCheck, removed)
             if len(queenToCheck.domain) == len(remove):
                 self.restore(variables, removed)
+                queenToCheck.value = -1
                 return None
             queenToCheck.domain = queenToCheck.domain.difference(remove)
             queenToCheck.value = -1
