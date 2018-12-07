@@ -1,12 +1,12 @@
 import unittest
 
-from constraints import Constraints
+from better_constraints import BetterConstraints
 from variables import Variables
 
-class Constraint_Tests(unittest.TestCase):
+class Better_Constraints_Tests(unittest.TestCase):
 
     def setUp(self):
-        self.constraints = Constraints(8)
+        self.constraints = BetterConstraints(8)
         self.variables = Variables(8)
 
     def test_constraints_exist(self):
