@@ -14,6 +14,24 @@ class ArcConsistency_Tests(unittest.TestCase):
         problem = Variables(8)
         self.assertTrue(self.ac.arcConsistent(problem))
 
+    def test_arc_will_restore_all_domains_when_not_given_the_last_queen(self):
+        ac = ArcConsistency(Arcs(4))
+        problem = Variables(4)
+        problem.queens[0].value = 1        
+        problem.queens[1].value = 3        
+        ac.arcConsistent(problem)
+        self.assertEqual(set([1, 2, 3, 4]), problem.queens[1].domain)
+        self.assertEqual(3, problem.queens[1].value)
+    
+    def test_arc_will_not_backtrack_too_far_when_it_sees_a_failure(self):
+        ac = ArcConsistency(Arcs(4))
+        problem = Variables(4)
+        problem.queens[0].value = 2        
+        problem.queens[3].value = 4
+        ac.arcConsistent(problem, problem.queens[3])
+        self.assertEqual(set([3]), problem.queens[3].domain)
+        self.assertEqual(-1, problem.queens[3].value)
+
     def test_arc_can_detect_an_inconsistency(self):
         problem = Variables(8)
         problem.queens[5].value = 5        
