@@ -6,17 +6,25 @@ from forwardchecking import ForwardChecking
 from backtracking import BackTracking
 from variables import Variables
 from modified_constraints import ModifiedConstraints
+from arc_consistentcy import ArcConsistency
+from arcs import Arcs
 
 ct = ModifiedConstraints(8)
 problem = Variables(8)
 
-problem.queens[4].domain = set([5])
+ac = ArcConsistency(Arcs(8))
+print(ac.arcConsistent(problem))
 
-forwardchecking = ForwardChecking(ct)
-forwardchecking.findSolution(problem)
 
-for idx, queen in enumerate(problem.queens):
-    print("Queen " + str(idx + 1) + ": " + str(queen.value))
+# problem.queens.value = 
+
+# problem.queens[4].domain = set([5])
+
+# forwardchecking = ForwardChecking(ct)
+# forwardchecking.findSolution(problem)
+
+# for idx, queen in enumerate(problem.queens):
+#     print("Queen " + str(idx + 1) + ": " + str(queen.value))
 
 # def runBackTracking(numberOfQueens):
 #     ct = ModifiedConstraints(numberOfQueens)
